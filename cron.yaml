@@ -1,0 +1,4 @@
+cron:
+- description: daily summary email
+  url: /daily_email
+  schedule: every day 06:10
