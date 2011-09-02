@@ -63,19 +63,9 @@ def correct_for_dst(today):
 
 class InputForm(webapp.RequestHandler):
     def get(self):
-        #remove this after testing
-        today = datetime.datetime.today()
-        yesterday_6am = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=1)
-        week_start = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=datetime.datetime.weekday(today))
-        spending_breakdown = Logged_spending.yesterday(yesterday_6am)[0]
-        yesterday_total = Logged_spending.yesterday(yesterday_6am)[1]
-        week_total = Logged_spending.week(week_start)
-        
-        message = "Yesterday's spending: " + yesterday_total + "\nWeekly spending so far: " + week_total + "\n\nBreakdown:\n" + spending_breakdown
-        
-        template_values = {'error' : message}
+
         path = os.path.join(os.path.dirname(__file__),'input_form.html')
-        self.response.out.write(template.render(path, template_values))
+        self.response.out.write(template.render(path, {}))
     
     def post(self):
         try: 
