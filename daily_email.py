@@ -16,23 +16,26 @@ import logging
 
 
 class DailyEmail(webapp.RequestHandler):
-    def post(self):
+    def get(self):
         try:
-			today = datetime.datetime.today()
-			yesterday_6am = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=1)
-			week_start = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=datetime.datetime.weekday(today))
-			
-			spending_breakdown = pocketaccountant.Logged_spending.yesterday(yesterday_6am)[0]
-			yesterday_total = pocketaccountant.Logged_spending.yesterday(yesterday_6am)[1]
-			week_total = pocketaccountant.Logged_spending.week(week_start)
-			
-			message = mail.EmailMessage()
-			message.sender = "yesterday@pocketaccountant.appspotmail.com"
-			message.to = emailreceiver.address
-			message = "Yesterday's spending: " + yesterday_total + "\nWeekly spending so far: " + week_total + "\n\nBreakdown:\n" + spending_breakdown
+            today = datetime.datetime.today()
+            yesterday_6am = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=1)
+            week_start = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=datetime.datetime.weekday(today))
             
-        except Exception, message:
-            logging.error(message)
+            spending_breakdown = pocketaccountant.Logged_spending.spending_during_period(yesterday_6am)[0]
+            yesterday_total = pocketaccountant.Logged_spending.spending_during_period(yesterday_6am)[1]
+            week_total = pocketaccountant.Logged_spending.spending_during_period(week_start)[1]
+            
+            message = mail.EmailMessage()
+            message.sender = "PocketAccountant@pocketaccountant.appspotmail.com"
+            message.subject = "Yesterday's spending"
+            message.to = emailreceiver.address
+            message.body = "Yesterday's spending: " + yesterday_total + "\nWeekly spending so far: " + week_total + "\n\nBreakdown:\n" + spending_breakdown
+            
+            message.send()
+        
+        except Exception, e:
+            logging.error(e)
 
 
 application = webapp.WSGIApplication(

@@ -19,22 +19,16 @@ class Logged_spending(db.Model):
     date = db.DateTimeProperty()
     
     @classmethod         
-    def yesterday(self, yesterday_6am):
+    def spending_during_period(self, start):
+        end = datetime.datetime(datetime.date.today().year, datetime.date.today().month, datetime.date.today().day, 6)
         total = 0
         spending_breakdown = ''
-        yesterday_spendings = Logged_spending.all().filter('date >', yesterday_6am)
-        for spending in yesterday_spendings:
+        spendings = Logged_spending.all().filter('date >', start).filter('date <', end)
+        for spending in spendings:
             spending_breakdown += "    " + Logged_spending.convert_money_to_string(spending.amount) + " on " + spending.descrip + " ("+ spending.category + ")\n"
             total += spending.amount
         return spending_breakdown, Logged_spending.convert_money_to_string(total)
-        
-    @classmethod         
-    def week(self, week_start):
-        total = 0
-        week_spendings = Logged_spending.all().filter('date >', week_start)
-        for spending in week_spendings:
-            total += spending.amount
-        return Logged_spending.convert_money_to_string(total)
+
         
     @staticmethod
     def convert_money_to_string(amount):
@@ -89,7 +83,7 @@ class InputForm(webapp.RequestHandler):
     @staticmethod
     def money_int(string):
         return int(''.join(string.split('.')))
-            
+
 
 application = webapp.WSGIApplication(
                                      [('/', InputForm)],
