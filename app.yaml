@@ -12,6 +12,9 @@ handlers:
   
 - url: /daily_email
   script: daily_email.py
+
+- url: /firstdm
+  script: firstdm.py
     
 - url: /_ah/mail/twitter@pocketaccountant.appspotmail.com.*
   script: twitter.py 
