@@ -28,8 +28,8 @@ class DirectMessage(db.Model):
     def make_datetime(idatetime):
         return datetime.datetime.strptime(string.join(idatetime.split(' +0000 ')), '%a %b %d %H:%M:%S %Y')
 
-class Process_new_DM(InboundMailHandler):
-    def receive(self, mail_message):
+class TwitterPull(webapp.RequestHandler):
+    def get(self):
         consumer = oauth.Consumer(key='A0YdjSUGSwKPfEEF1ThQ', secret=secrets.consumer)
         token = oauth.Token(key='371653560-dLklDiFqg8hMKOsskiF0MDmdCLOrwKhwH08vyq0E', secret=secrets.access)
         client = oauth.Client(consumer, token)
@@ -44,7 +44,7 @@ class Process_new_DM(InboundMailHandler):
         jsoncontent = json.loads(content)
         try: 
             if not jsoncontent:
-               logging.error("Received an email, but there weren't any new DMs")
+               logging.info("No new DMs")
             else:
                 i = len(jsoncontent) - 1
                 while i >= 0:
@@ -64,18 +64,12 @@ class Process_new_DM(InboundMailHandler):
                     db.put(spending)
                     
         except Exception, message:
-            url = 'http://api.twitter.com/1/direct_messages/new.json'
-            resp, content = client.request(    
-                url,
-                method="POST",
-                body='screen_name=lovedaybrooke&text='+ str(message),
-                headers=None,
-                force_auth_header=True
-            )
+            logging.error(message)
         
-application = webapp.WSGIApplication([
-  Process_new_DM.mapping()
-], debug=True)
+
+application = webapp.WSGIApplication(
+                                     [('/twitterpull', TwitterPull)],
+                                     debug=True)
 
 def main():
     run_wsgi_app(application)
