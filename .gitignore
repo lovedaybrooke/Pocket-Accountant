@@ -1,1 +1,3 @@
 emailreceiver.py
+secrets.py
+*.pyc
