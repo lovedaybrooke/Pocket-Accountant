@@ -10,5 +10,14 @@ handlers:
 - url: /images
   static_dir: images
   
+- url: /daily_email
+  script: daily_email.py
+    
+- url: /_ah/mail/twitter@pocketaccountant.appspotmail.com.*
+  script: twitter.py 
+  
 - url: /.*
   script: pocketaccountant.py
+
+inbound_services:
+- mail
