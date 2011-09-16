@@ -1,3 +1,4 @@
 emailreceiver.py
 secrets.py
 *.pyc
+.DS_Store
