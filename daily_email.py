@@ -21,16 +21,18 @@ class DailyEmail(webapp.RequestHandler):
             today = datetime.datetime.today()
             yesterday_6am = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=1)
             week_start = datetime.datetime(today.year, today.month, today.day, 6, 0) - datetime.timedelta(days=datetime.datetime.weekday(today))
+            month_start = datetime.datetime(today.year, today.month, 1, 6, 0)
             
             spending_breakdown = pocketaccountant.Logged_spending.spending_during_period(yesterday_6am)[0]
             yesterday_total = pocketaccountant.Logged_spending.spending_during_period(yesterday_6am)[1]
             week_total = pocketaccountant.Logged_spending.spending_during_period(week_start)[1]
+            month_total = pocketaccountant.Logged_spending.spending_during_period(month_start)[1]
             
             message = mail.EmailMessage()
             message.sender = "PocketAccountant@pocketaccountant.appspotmail.com"
             message.subject = "Yesterday's spending"
             message.to = emailreceiver.address
-            message.body = "Yesterday's spending: " + yesterday_total + "\nWeekly spending so far: " + week_total + "\n\nBreakdown:\n" + spending_breakdown
+            message.body = "Yesterday's spending: " + yesterday_total + "\nWeek's spending so far: " + week_total + "\nMonth's spending so far: " + month_total + "\n\nBreakdown:\n" + spending_breakdown
             
             message.send()
         
