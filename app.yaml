@@ -13,5 +13,8 @@ handlers:
 - url: /daily_email
   script: daily_email.py
   
+- url: /twitterpull
+  script: twitterpull.py
+  
 - url: /.*
   script: pocketaccountant.py
