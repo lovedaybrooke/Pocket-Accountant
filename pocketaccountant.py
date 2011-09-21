@@ -28,14 +28,17 @@ class Logged_spending(db.Model):
             spending_breakdown += "    " + Logged_spending.convert_money_to_string(spending.amount) + " on " + spending.descrip + " ("+ spending.category + ")\n"
             total += spending.amount
         return spending_breakdown, Logged_spending.convert_money_to_string(total)
-
-        
+ 
     @staticmethod
     def convert_money_to_string(amount):
         amount = str(amount)
         pence = amount[-2:]
-        pounds = amount[:(len(amount)-2)]
+        if len(amount) > 2:
+            pounds = amount[:(len(amount)-2)]
+        else:
+            pounds = '0'
         return u"\xA3" + pounds + "." + pence
+
         
 
 def correct_for_dst(today):
