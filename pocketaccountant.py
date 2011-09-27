@@ -27,16 +27,22 @@ class Logged_spending(db.Model):
         for spending in spendings:
             spending_breakdown += "    " + Logged_spending.convert_money_to_string(spending.amount) + " on " + spending.descrip + " ("+ spending.category + ")\n"
             total += spending.amount
+        if total == 0:
+            spending_breakdown = "no spending"
         return spending_breakdown, Logged_spending.convert_money_to_string(total)
  
     @staticmethod
     def convert_money_to_string(amount):
-        amount = str(amount)
-        pence = amount[-2:]
-        if len(amount) > 2:
-            pounds = amount[:(len(amount)-2)]
-        else:
+        if amount == 0:
             pounds = '0'
+            pence = '00'        
+        else:
+            amount = str(amount)
+            pence = amount[-2:]
+            if len(amount) > 2:
+                pounds = amount[:(len(amount)-2)]
+            else:
+                pounds = '0'
         return u"\xA3" + pounds + "." + pence
 
         
