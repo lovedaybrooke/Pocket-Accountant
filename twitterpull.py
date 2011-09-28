@@ -28,11 +28,10 @@ class DirectMessage(db.Model):
     def make_datetime(idatetime):
         return datetime.datetime.strptime(string.join(idatetime.split(' +0000 ')), '%a %b %d %H:%M:%S %Y')
         
-    @classmethod
-    def parse(self):
-        DMtext = self.text
-        if DMtext.find(',') == -1:
-            return DMtext.split(' ',1)
+    @staticmethod
+    def parse(DMtext):
+        if len(DMtext.split(',')) == 1:
+            return DMtext.split(' ', 1)
         else:
             return DMtext.split(',')
         
@@ -64,7 +63,7 @@ class TwitterPull(webapp.RequestHandler):
                     i -= 1
                     db.put(newDM)
                     
-                    DMtext = newDM.parse()
+                    DMtext = DirectMessage.parse(jsoncontent[i]['text'])
                     spending = pocketaccountant.Logged_spending()
                     spending.amount = pocketaccountant.InputForm.money_int(DMtext[0])
                     spending.descrip = DMtext[1]
