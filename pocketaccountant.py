@@ -15,7 +15,6 @@ import datetime
 class Logged_spending(db.Model):
     descrip = db.StringProperty()
     amount = db.IntegerProperty()
-    category = db.StringProperty()
     date = db.DateTimeProperty()
     
     @classmethod         
