@@ -13,7 +13,7 @@ import datetime
 import pocketaccountant
 import emailreceiver
 import logging
-
+import traceback
 
 class DailyEmail(webapp.RequestHandler):
     def get(self):
@@ -36,9 +36,9 @@ class DailyEmail(webapp.RequestHandler):
             
             message.send()
         
-        except Exception, e:
-            logging.error(e)
-
+        except Exception:
+            stacktrace = traceback.format_exc()
+            logging.error("%s", stacktrace)
 
 application = webapp.WSGIApplication(
                                      [('/daily_email', DailyEmail)],
