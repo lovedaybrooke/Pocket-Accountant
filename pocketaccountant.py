@@ -24,7 +24,7 @@ class Logged_spending(db.Model):
         spending_breakdown = ''
         spendings = Logged_spending.all().filter('date >', start).filter('date <', end)
         for spending in spendings:
-            spending_breakdown += "    " + Logged_spending.convert_money_to_string(spending.amount) + " on " + spending.descrip + " ("+ spending.category + ")\n"
+            spending_breakdown += "    " + Logged_spending.convert_money_to_string(spending.amount) + " on" + spending.descrip + "\n"
             total += spending.amount
         if total == 0:
             spending_breakdown = "no spending"
