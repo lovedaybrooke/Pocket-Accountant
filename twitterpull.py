@@ -10,35 +10,41 @@ import simplejson as json
 import secrets
 import pocketaccountant
 
-class DirectMessage(db.Model):            
+
+class DirectMessage(db.Model):
     text = db.StringProperty()
     id = db.StringProperty()
     date = db.DateTimeProperty()
-    
+
     @classmethod
     def last_DM_ID(self):
         last_DM = DirectMessage.all().order('-date').get()
         return last_DM.id
-        
+
     @staticmethod
     def make_datetime(idatetime):
-        return datetime.datetime.strptime(string.join(idatetime.split(' +0000 ')), '%a %b %d %H:%M:%S %Y')
-        
+        return datetime.datetime.strptime(string.join(idatetime.split(
+            ' +0000 ')), '%a %b %d %H:%M:%S %Y')
+
     @staticmethod
     def parse(DMtext):
         if len(DMtext.split(',')) == 1:
             return DMtext.split(' ', 1)
         else:
             return DMtext.split(',')
-        
+
 
 class TwitterPull(webapp.RequestHandler):
     def get(self):
-        consumer = oauth.Consumer(key='A0YdjSUGSwKPfEEF1ThQ', secret=secrets.consumer)
-        token = oauth.Token(key='371653560-dLklDiFqg8hMKOsskiF0MDmdCLOrwKhwH08vyq0E', secret=secrets.access)
+        consumer = oauth.Consumer(key='A0YdjSUGSwKPfEEF1ThQ',
+            secret=secrets.consumer)
+        token = oauth.Token(
+            key='371653560-dLklDiFqg8hMKOsskiF0MDmdCLOrwKhwH08vyq0E',
+            secret=secrets.access)
         client = oauth.Client(consumer, token)
-        url = 'http://api.twitter.com/1.1/direct_messages.json?since_id='+DirectMessage.last_DM_ID()
-        resp, content = client.request(    
+        url = ('http://api.twitter.com/1.1/direct_messages'
+            '.json?since_id='+DirectMessage.last_DM_ID())
+        resp, content = client.request(
             url,
             method="GET",
             body=None,
