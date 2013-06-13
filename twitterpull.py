@@ -1,18 +1,14 @@
 import logging
-import urllib
-import re
-import string
+import datetime
+
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
-from google.appengine.api import mail
-from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 import oauth2 as oauth
-import httplib2
 import simplejson as json
+
 import secrets
 import pocketaccountant
-import datetime
 
 class DirectMessage(db.Model):            
     text = db.StringProperty()
