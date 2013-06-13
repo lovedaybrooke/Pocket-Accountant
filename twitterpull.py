@@ -41,7 +41,7 @@ class TwitterPull(webapp.RequestHandler):
         consumer = oauth.Consumer(key='A0YdjSUGSwKPfEEF1ThQ', secret=secrets.consumer)
         token = oauth.Token(key='371653560-dLklDiFqg8hMKOsskiF0MDmdCLOrwKhwH08vyq0E', secret=secrets.access)
         client = oauth.Client(consumer, token)
-        url = 'http://api.twitter.com/1/direct_messages.json?since_id='+DirectMessage.last_DM_ID()
+        url = 'http://api.twitter.com/1.1/direct_messages.json?since_id='+DirectMessage.last_DM_ID()
         resp, content = client.request(    
             url,
             method="GET",
