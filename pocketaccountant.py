@@ -5,10 +5,6 @@ for k in [k for k in sys.modules if k.startswith('django')]:
 from google.appengine.dist import use_library
 use_library('django', '1.2')
 from google.appengine.ext import db
-from google.appengine.ext.webapp import template
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
-from google.appengine.api import mail
 import datetime
 
 
@@ -65,44 +61,3 @@ def correct_for_dst(today):
         return today + datetime.timedelta(0, 3600)
     else:
         return today
-
-
-class InputForm(webapp.RequestHandler):
-    def get(self):
-        path = os.path.join(os.path.dirname(__file__), 'input_form.html')
-        self.response.out.write(template.render(path, {}))
-
-    def post(self):
-        try:
-            spending = Logged_spending()
-            spending.descrip = self.request.get('descrip')
-            spending.amount = InputForm.money_int(self.request.get('amount'))
-            spending.category = self.request.get('category')
-            spending.date = correct_for_dst(datetime.datetime.today())
-            db.put(spending)
-            path = os.path.join(os.path.dirname(__file__), 'input_form.html')
-            self.response.out.write(template.render(path, {}))
-
-        except Exception, message:
-            template_values = {
-                'error': message
-                }
-            path = os.path.join(os.path.dirname(__file__), 'input_form.html')
-            self.response.out.write(template.render(path, template_values))
-
-    @staticmethod
-    def money_int(string):
-        return int(''.join(string.split('.')))
-
-
-application = webapp.WSGIApplication(
-    [('/', InputForm)],
-    debug=True)
-
-
-def main():
-    run_wsgi_app(application)
-
-
-if __name__ == "__main__":
-    main()

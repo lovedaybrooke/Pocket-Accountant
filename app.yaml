@@ -4,12 +4,6 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /stylesheets
-  static_dir: stylesheets
-
-- url: /images
-  static_dir: images
-  
 - url: /daily_email
   script: daily_email.py
   
