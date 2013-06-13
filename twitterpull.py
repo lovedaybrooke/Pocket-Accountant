@@ -50,33 +50,33 @@ class TwitterPull(webapp.RequestHandler):
             force_auth_header=True
         )
         jsoncontent = json.loads(content)
-        try: 
-            if not jsoncontent:
-               logging.info("No new DMs")
-            else:
-                i = len(jsoncontent) - 1
-                while i >= 0:
-                    newDM = DirectMessage()
-                    newDM.id = jsoncontent[i]['id_str']
-                    newDM.text = jsoncontent[i]['text']
-                    newDM.date = pocketaccountant.correct_for_dst(DirectMessage.make_datetime(jsoncontent[i]['created_at']))
-                    i -= 1
-                    db.put(newDM)
-                    
-                    DMtext = DirectMessage.parse(jsoncontent[i]['text'])
-                    spending = pocketaccountant.Logged_spending()
-                    spending.amount = pocketaccountant.InputForm.money_int(DMtext[0])
-                    spending.descrip = DMtext[1]
-                    spending.date = pocketaccountant.correct_for_dst(DirectMessage.make_datetime(jsoncontent[i]['created_at']))
-                    db.put(spending)
-                    
-        except Exception, message:
-            logging.error(message)
-        
+        if not jsoncontent:
+            logging.info("No new DMs")
+        else:
+            i = len(jsoncontent) - 1
+            while i >= 0:
+                newDM = DirectMessage()
+                newDM.id = jsoncontent[i]['id_str']
+                newDM.text = jsoncontent[i]['text']
+                newDM.date = pocketaccountant.correct_for_dst(
+                    DirectMessage.make_datetime(
+                    jsoncontent[i]['created_at']))
+                i -= 1
+                db.put(newDM)
 
-application = webapp.WSGIApplication(
-                                     [('/twitterpull', TwitterPull)],
+                DMtext = DirectMessage.parse(jsoncontent[i]['text'])
+                spending = pocketaccountant.Logged_spending()
+                spending.amount = pocketaccountant.InputForm.money_int(
+                    DMtext[0])
+                spending.descrip = DMtext[1]
+                spending.date = pocketaccountant.correct_for_dst(
+                    DirectMessage.make_datetime(
+                    jsoncontent[i]['created_at']))
+                db.put(spending)
+
+application = webapp.WSGIApplication([('/twitterpull', TwitterPull)],
                                      debug=True)
+
 
 def main():
     run_wsgi_app(application)
