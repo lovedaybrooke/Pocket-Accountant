@@ -90,7 +90,7 @@ class LoggedSpending(db.Model):
             pence = self.amount[-2:]
             # check if any pound figures have been given. If not, insert a 0.
             if len(amount) > 2:
-                pounds =self.amount[:(len(self.amount)-2)]
+                pounds = self.amount[:(len(self.amount) - 2)]
             else:
                 pounds = '0'
 
@@ -118,7 +118,7 @@ class DirectMessage(db.Model):
 
     @staticmethod
     def make_datetime(date_string):
-        """ Convert the date string from the twitter json (eg "Fri Jun 14 
+        """ Convert the date string from the twitter json (eg "Fri Jun 14
         20:52:08 +0000 2013" to a datetime
         """
 
@@ -128,7 +128,7 @@ class DirectMessage(db.Model):
 
 class TwitterPull(webapp2.RequestHandler):
     def get(self):
-        """ Get the latest DMs from the Twitter API, make them into dm and 
+        """ Get the latest DMs from the Twitter API, make them into dm and
         logged spending objects
         """
 
@@ -141,7 +141,7 @@ class TwitterPull(webapp2.RequestHandler):
 
     @classmethod
     def get_dm_json(cls):
-        """ Request the most recent DMs since the last pull from the Twitter 
+        """ Request the most recent DMs since the last pull from the Twitter
         API, and return the response as json
         """
 
@@ -152,7 +152,7 @@ class TwitterPull(webapp2.RequestHandler):
             secret=secrets.access)
         client = oauth.Client(consumer, token)
         url = ('http://api.twitter.com/1.1/direct_messages'
-            '.json?since_id='+DirectMessage.last_DM_ID())
+            '.json?since_id=' + DirectMessage.last_DM_ID())
         resp, content = client.request(url,
             method="GET",
             body=None,
@@ -166,17 +166,17 @@ class DailyEmail(webapp2.RequestHandler):
         """ Get all the information needed for the daily email, make & send
         the email
         """
-        
+
         today = datetime.datetime.today()
         today_6am = datetime.datetime(today.year, today.month, today.day, 6, 0)
 
-        yesterday_6am =  today_6am - datetime.timedelta(days=1)
+        yesterday_6am = today_6am - datetime.timedelta(days=1)
         breakdown = Logged_spending.itemised_spending_in_period(
             yesterday_6am)
         yesterday_total = Logged_spending.total_spending_in_period(
             yesterday_6am)
 
-        week_start =  today_6am - datetime.timedelta(
+        week_start = today_6am - datetime.timedelta(
             days=datetime.datetime.weekday(today))
         week_total = Logged_spending.total_spending_in_period(week_start)
 
