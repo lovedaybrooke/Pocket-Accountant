@@ -1,12 +1,13 @@
-import os
-import sys
-for k in [k for k in sys.modules if k.startswith('django')]:
-    del sys.modules[k]
-from google.appengine.dist import use_library
-use_library('django', '1.2')
-from google.appengine.ext import db
 import datetime
+import logging
 
+from google.appengine.ext import db
+import webapp2
+import oauth2 as oauth
+import simplejson as json
+
+import secrets
+import emailreceiver
 
 class Logged_spending(db.Model):
     descrip = db.StringProperty()
