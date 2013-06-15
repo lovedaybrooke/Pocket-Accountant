@@ -5,11 +5,5 @@ api_version: 1
 threadsafe: false
 
 handlers:
-- url: /daily_email
-  script: daily_email.application
-
-- url: /twitterpull
-  script: twitterpull.application
-
 - url: /.*
   script: pocketaccountant.application
