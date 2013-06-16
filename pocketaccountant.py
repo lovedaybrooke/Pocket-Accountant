@@ -55,7 +55,7 @@ class LoggedSpending(db.Model):
             'date <', end)
         for spending in spendings:
             spending_breakdown += "    {0} on {1}\n".format(
-                cls.convert_money_to_string(spending.amount),
+                LoggedSpending.convert_money_to_string(spending.amount),
                 spending.descrip)
             any_transactions = True
 
@@ -172,17 +172,17 @@ class DailyEmail(webapp2.RequestHandler):
         today_6am = datetime.datetime(today.year, today.month, today.day, 6, 0)
 
         yesterday_6am = today_6am - datetime.timedelta(days=1)
-        breakdown = Logged_spending.itemised_spending_in_period(
+        breakdown = LoggedSpending.itemised_spending_in_period(
             yesterday_6am)
-        yesterday_total = Logged_spending.total_spending_in_period(
+        yesterday_total = LoggedSpending.total_spending_in_period(
             yesterday_6am)
 
         week_start = today_6am - datetime.timedelta(
             days=datetime.datetime.weekday(today))
-        week_total = Logged_spending.total_spending_in_period(week_start)
+        week_total = LoggedSpending.total_spending_in_period(week_start)
 
         month_start = datetime.datetime(today.year, today.month, 1, 6, 0)
-        month_total = Logged_spending.total_spending_in_period(month_start)
+        month_total = LoggedSpending.total_spending_in_period(month_start)
 
         message = mail.EmailMessage()
         message.sender = ("PocketAccountant@"
