@@ -34,10 +34,7 @@ class ModelTests(unittest.TestCase):
 
         # add in test data
         for s in model_fixtures.spending:
-            spending = LoggedSpending(descrip=s["descrip"],
-                date=datetime.datetime.strptime(s["date"], "%H.%M %d/%m/%Y"),
-                amount=s["amount"])
-            spending.put()
+            LoggedSpending(**s).put()
 
     def tearDown(self):
         self.testbed.deactivate()
