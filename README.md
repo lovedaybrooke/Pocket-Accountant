@@ -36,7 +36,7 @@ The sender_address has to either be the email address of a registered administra
 
 At 5am each day, a cron job makes a request to the Twitter API for any new DMs sent to the receiver account. All the DMs received back are added to the database as DM objects, then processed and added as LoggedSpending objects. Storing the DMs is partly a back-up, and partly so it's easy to find out the last DM id received, and thus tailor the API call.
 
-An hour after this Twitter grab has happened, another cron job starts. It looks over the LoggedSpending in the database to calculate how much was spent yesterday (calculated from 6am yesterday to 6am today), how much this week so far, how much this month so far. The process also gets details on the exact purchases made yesterday. It puts all of that information into an email, and sends it out to the receiver address specified in secrets.py.
+An hour after this Twitter grab has happened, another cron job starts. It looks over the LoggedSpending in the database to calculate how much was spent yesterday (calculated from 5am yesterday to 5am today), how much this week so far, how much this month so far. The process also gets details on the exact purchases made yesterday. It puts all of that information into an email, and sends it out to the receiver address specified in secrets.py.
 
 (To be really literal, the two cron jobs both make get requests to URLs, which kicks off the right activity.)
 
