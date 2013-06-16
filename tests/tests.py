@@ -35,13 +35,15 @@ class ModelTests(unittest.TestCase):
         # add in test data
         for s in model_fixtures.spending:
             LoggedSpending(**s).put()
+        for dm in model_fixtures.dms:
+            DirectMessage(**dm).put()
 
     def tearDown(self):
         self.testbed.deactivate()
 
     def test__loggedspending__create(self):
-        """ Test the create method of LoggedSpending actually creates the
-        logged spending object as expected and saves to DB
+        """ Test LoggedSpending.create
+        actually creates the logged spending object as expected and saves to DB
         """
 
         dm_text = "26.99,powerdrill"
@@ -54,7 +56,7 @@ class ModelTests(unittest.TestCase):
             "LoggedSpending.create doesn't work")
 
     def test__loggedspending__itemised_spending_in_period(self):
-        """ Test the itemised_spending_in_period method of LoggedSpending
+        """ Test LoggedSpending.itemised_spending_in_period
         correctly puts together a string of the spending between today at 6am
         and the provided start-date
         """
@@ -75,7 +77,7 @@ class ModelTests(unittest.TestCase):
             error_message)
 
     def test__loggedspending__total_spending_in_period(self):
-        """ Test the total_spending_in_period method of LoggedSpending
+        """ Test LoggedSpending.total_spending_in_period
         correctly calculates the total spending between today at 6am
         and the provided start-date and returns as a nicely-formatted string
         """
@@ -94,7 +96,7 @@ class ModelTests(unittest.TestCase):
             error_message)
 
     def test__loggedspending__test_convert_money_to_string(self):
-        """ Test the convert_money_to_string method of LoggedSpending
+        """ Test LoggedSpending.convert_money_to_string
         correctly converts an integer into a nicely-formatted string
         """
 
@@ -118,6 +120,40 @@ class ModelTests(unittest.TestCase):
             LoggedSpending.convert_money_to_string(pounds_and_pence),
             ("LoggedSpending.convert_money_to_string doesn't correctly convert"
             " sums of pounds and pence"))
+
+    def test__directmessage__last_DM_ID(self):
+        """ Test DirectMessage.last_DM_ID
+        actually returns the highest DM ID in the database
+        """
+
+        last_DM_id = DirectMessage.last_DM_ID()
+        self.assertEqual(last_DM_id, '9870005', last_DM_id)
+
+    def test__directmessage__create(self):
+        """ Test DirectMessage.create
+        actually creates and saves a DM to the DB with all the right
+        attributes – and that it can successfully retrieve those
+        attributes from the json response the Twitter API gives.
+        """
+
+        json_file = open('tests/example_twitter_api_response.json').read()
+        dm_list = json.loads(json_file)
+        DirectMessage.create(dm_list[0])
+        exists = DirectMessage.all().filter('id =', '9870006').get()
+        self.assertTrue(exists,
+            "DirectMessage.create method doesn't correctly make & save a DM")
+
+    def test__directmessage__make_datetime(self):
+        """ Test DirectMessage.make_datetime
+        corrects transforms the kind of datestrings returned in the json
+        response of the Twitter API into proper datetimes.
+        """
+
+        date_string = "Mon Jul 17 19:52:08 +0000 2012"
+        date_time = DirectMessage.make_datetime(date_string)
+        correct_date_time = datetime.datetime(2012, 7, 17, 19, 52, 8)
+
+        self.assertEqual(date_time, correct_date_time)
 
 
 if __name__ == '__main__':
