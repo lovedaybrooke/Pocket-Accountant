@@ -37,7 +37,7 @@ class LoggedSpending(db.Model):
         spending.descrip = dm_split[1]
         spending.amount = int("".join(dm_split[0].split('.')))
         spending.date = dm_date
-        db.put(spending)
+        spending.put()
 
     @classmethod
     def itemised_spending_in_period(self, start):
