@@ -43,7 +43,7 @@ class ModelTests(unittest.TestCase):
         """ Test the create method of LoggedSpending actually creates the
         logged spending object as expected and saves to DB
         """
-        
+
         dm_text = "26.99,powerdrill"
         dm_datetime = datetime.datetime(2013, 6, 14, 12, 52, 8)
         LoggedSpending.create(dm_text, dm_datetime)
@@ -54,11 +54,11 @@ class ModelTests(unittest.TestCase):
             "LoggedSpending.create doesn't work")
 
     def test__loggedspending__itemised_spending_in_period(self):
-        """ Test the itemised_spending_in_period method of LoggedSpending 
+        """ Test the itemised_spending_in_period method of LoggedSpending
         correctly puts together a string of the spending between today at 6am
         and the provided start-date
         """
-        
+
         thurs_start = datetime.datetime(2013, 6, 13, 6)
         correct_thurs_spending = ("    £4.50 on Lunch on thursday\n"
             "    £45.00 on Theatre tickets\n"
@@ -75,11 +75,11 @@ class ModelTests(unittest.TestCase):
             error_message)
 
     def test__loggedspending__total_spending_in_period(self):
-        """ Test the total_spending_in_period method of LoggedSpending 
+        """ Test the total_spending_in_period method of LoggedSpending
         correctly calculates the total spending between today at 6am
         and the provided start-date and returns as a nicely-formatted string
         """
-        
+
         thurs_start = datetime.datetime(2013, 6, 13, 6)
         correct_thurs_total = '£72.95'
         thurs_total = LoggedSpending.total_spending_in_period(
@@ -94,10 +94,10 @@ class ModelTests(unittest.TestCase):
             error_message)
 
     def test__loggedspending__test_convert_money_to_string(self):
-        """ Test the convert_money_to_string method of LoggedSpending 
+        """ Test the convert_money_to_string method of LoggedSpending
         correctly converts an integer into a nicely-formatted string
         """
-        
+
         pence_only = 34
         pence_only_str = '£0.34'
         self.assertEqual(pence_only_str,
