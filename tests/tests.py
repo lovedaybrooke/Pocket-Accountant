@@ -156,5 +156,81 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(date_time, correct_date_time)
 
 
+class EndToEndTests(unittest.TestCase):
+
+    def setUp(self):
+        # First, create an instance of the Testbed class.
+        self.testbed = testbed.Testbed()
+        # Then activate the testbed, which prepares the service stubs for use.
+        self.testbed.activate()
+        # Next, declare which service stubs you want to use.
+        self.testbed.init_datastore_v3_stub()
+
+        # Set up just one DM, so we can use that to get the last DM ID
+        DirectMessage(**model_fixtures.dms[0]).put()
+
+    @staticmethod
+    def mimic_twitterpull_get(filename):
+        """ A method to mimic TwitterPull.get
+        because that method calls a function that actually calls the Twitter
+        API to get its JSON
+        """
+        # @TODO find a better way of doing this
+
+        json_file = open(filename).read()
+        dm_json = json.loads(json_file)
+
+        if not dm_json:
+            logging.info("No new DMs")
+        for dm in dm_json:
+            dm_obj = DirectMessage.create(dm)
+            LoggedSpending.create(dm['text'], dm_obj.date)
+
+    def test_twitter_pull_with_new_DMs(self):
+        """ Test TwitterPull.get when there are new DMs to pick up
+        """
+
+        EndToEndTests.mimic_twitterpull_get(
+            'tests/example_twitter_api_response.json')
+
+        # Get the text for every DM except the first DM created in setUp()
+        texts_from_dms_created = [dm.text for dm in DirectMessage.all().filter(
+            'id >', "9870005").order('id').fetch(10)]
+        correct_texts = ["26.99,powerdrill", "5.00 noodles for lunch",
+            "10.75, after-work beers"]
+
+        error_message = ("TwitterPull doesn't appear to be creating the right "
+            "DMs.\nDMs should have the text:\n{0}\n\nDMs actually have the "
+            "text:\n{1}").format("\n".join(correct_texts),
+            "\n".join(texts_from_dms_created))
+        self.assertEqual(texts_from_dms_created, correct_texts,
+            error_message)
+
+        descrips_from_spendings_created = [s.descrip for s in
+            LoggedSpending.all().filter('date >', datetime.datetime(2013, 6,
+            13)).order('date').fetch(10)]
+        correct_descrips = ["powerdrill", "noodles for lunch",
+            "after-work beers"]
+
+        error_message = ("TwitterPull doesn't appear to be creating the right "
+            "LoggedSpendings.\nSpendings should have the descrip:\n"
+            "{0}\n\nSpendings actually have the descrip:\n{1}").format(
+            "\n".join(correct_descrips),
+            "\n".join(descrips_from_spendings_created))
+        self.assertEqual(descrips_from_spendings_created, correct_descrips,
+            error_message)
+
+    def test_twitter_pull_with_no_new_DMs(self):
+        """ Test TwitterPull.get when there are NO new DMs to pick up
+        """
+
+        EndToEndTests.mimic_twitterpull_get(
+            'tests/example_empty_twitter_api_response.json')
+
+        # Get the text for every DM except the first DM created in setUp()
+        dms_created = DirectMessage.all().filter('id >', "9870005").fetch(10)
+
+        self.assertFalse(dms_created)
+
 if __name__ == '__main__':
     unittest.main()
