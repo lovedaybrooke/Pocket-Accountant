@@ -1,4 +1,11 @@
 # coding=utf-8
+
+# Adding lib/ to the PYTHONPATH so I can use that dir to store external
+# libraries
+import os, sys
+lib_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'lib')
+sys.path.insert(0, lib_path)
+
 import datetime
 import logging
 
