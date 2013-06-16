@@ -176,19 +176,21 @@ class DailyEmail(webapp2.RequestHandler):
         """
 
         today = datetime.datetime.today()
-        today_6am = datetime.datetime(today.year, today.month, today.day, 6, 0)
+        today_start = datetime.datetime(today.year, today.month, today.day,
+            secrets.day_starts_at)
 
-        yesterday_6am = today_6am - datetime.timedelta(days=1)
+        yesterday_start = today_start - datetime.timedelta(days=1)
         breakdown = LoggedSpending.itemised_spending_in_period(
-            yesterday_6am)
+            yesterday_start)
         yesterday_total = LoggedSpending.total_spending_in_period(
-            yesterday_6am)
+            yesterday_start)
 
-        week_start = today_6am - datetime.timedelta(
+        week_start = today_start - datetime.timedelta(
             days=datetime.datetime.weekday(today))
         week_total = LoggedSpending.total_spending_in_period(week_start)
 
-        month_start = datetime.datetime(today.year, today.month, 1, 6, 0)
+        month_start = datetime.datetime(today.year, today.month, 1,
+            secrets.day_starts_at)
         month_total = LoggedSpending.total_spending_in_period(month_start)
 
         message = mail.EmailMessage()
