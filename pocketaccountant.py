@@ -2,6 +2,7 @@ import datetime
 import logging
 
 from google.appengine.ext import db
+from google.appengine.api import mail
 import webapp2
 import oauth2 as oauth
 import simplejson as json
