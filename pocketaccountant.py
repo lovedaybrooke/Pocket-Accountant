@@ -80,18 +80,18 @@ class LoggedSpending(db.Model):
         return LoggedSpending.convert_money_to_string(total)
 
     @staticmethod
-    def convert_money_to_string(cls, amount):
-        """ Convert the amount (stored in pence) into a string like £2.50 """
+    def convert_money_to_string(amount):
+        """ Convert the amount (stored in pence) into a string like 2.50 """
 
-        if self.amount == 0:
+        if amount == 0:
             pounds = '0'
             pence = '00'
         else:
-            self.amount = str(self.amount)
-            pence = self.amount[-2:]
+            amount = str(amount)
+            pence = amount[-2:]
             # check if any pound figures have been given. If not, insert a 0.
             if len(amount) > 2:
-                pounds = self.amount[:(len(self.amount) - 2)]
+                pounds = amount[:(len(amount) - 2)]
             else:
                 pounds = '0'
 
