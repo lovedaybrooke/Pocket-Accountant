@@ -19,6 +19,7 @@ Pocket Accountant works by having a Twitter 'receiver' account, to which all DMs
 ### Secrets.py
 
 In this file you'll need the following:
+
 * consumer_key = "{{ the consumer key from your receiver twitter account }}"
 * consumer_secret = "{{ the consumer secret from your receiver twitter account }}"
 * access_key = "{{ the access token from your receiver twitter account }}"
