@@ -95,7 +95,7 @@ class LoggedSpending(db.Model):
             else:
                 pounds = '0'
 
-        return u"\xA3" + pounds + "." + pence
+        return ("£{0}.{1}".format(pounds, pence))
 
 
 class DirectMessage(db.Model):
