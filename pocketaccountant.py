@@ -16,7 +16,6 @@ import oauth2 as oauth
 import simplejson as json
 
 import secrets
-import emailreceiver
 
 
 class LoggedSpending(db.Model):
@@ -154,11 +153,11 @@ class TwitterPull(webapp2.RequestHandler):
         API, and return the response as json
         """
 
-        consumer = oauth.Consumer(key='A0YdjSUGSwKPfEEF1ThQ',
-            secret=secrets.consumer)
+        consumer = oauth.Consumer(key=secrets.consumer_key,
+            secret=secrets.consumer_secret)
         token = oauth.Token(
-            key='371653560-dLklDiFqg8hMKOsskiF0MDmdCLOrwKhwH08vyq0E',
-            secret=secrets.access)
+            key=secrets.access_key,
+            secret=secrets.access_secret)
         client = oauth.Client(consumer, token)
         url = ('http://api.twitter.com/1.1/direct_messages'
             '.json?since_id=' + DirectMessage.last_DM_ID())
@@ -193,10 +192,9 @@ class DailyEmail(webapp2.RequestHandler):
         month_total = LoggedSpending.total_spending_in_period(month_start)
 
         message = mail.EmailMessage()
-        message.sender = ("PocketAccountant@"
-            "pocketaccountant.appspotmail.com")
+        message.sender = secrets.sender_address
         message.subject = "Yesterday's spending: {0}".format(yesterday_total)
-        message.to = emailreceiver.address
+        message.to = secrets.receiver_address
         message.body = ("Yesterday's spending: {0}\n"
             "Week's spending so far: {1}\n"
             "Month's spending so far: {2}\n\n"
