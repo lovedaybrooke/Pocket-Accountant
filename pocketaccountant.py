@@ -134,7 +134,7 @@ class TwitterPull(webapp2.RequestHandler):
         logged spending objects
         """
 
-        dm_json = cls.get_dm_json()
+        dm_json = TwitterPull.get_dm_json()
         if not dm_json:
             logging.info("No new DMs")
         for dm in dm_json:

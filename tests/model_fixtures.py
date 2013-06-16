@@ -2,9 +2,9 @@ import datetime
 
 spending = [
     {
-        "descrip": "Lunch on thursday",
-        "amount": 450,
-        "date": datetime.datetime(2013, 6, 13, 12, 7)
+        "descrip": "Noodle street takeaway",
+        "amount": 2345,
+        "date": datetime.datetime(2013, 6, 13, 20, 13)
     },
     {
         "descrip": "Theatre tickets",
@@ -12,9 +12,9 @@ spending = [
         "date": datetime.datetime(2013, 6, 13, 15, 42)
     },
     {
-        "descrip": "Noodle street takeaway",
-        "amount": 2345,
-        "date": datetime.datetime(2013, 6, 13, 20, 13)
+        "descrip": "Lunch on thursday",
+        "amount": 450,
+        "date": datetime.datetime(2013, 6, 13, 12, 7)
     },
     {
         "descrip": "Chocolate bar",
@@ -30,9 +30,9 @@ spending = [
 
 dms = [
     {
-        "descrip": "4.50, Lunch on thursday",
-        "id": "9870003",
-        "date": datetime.datetime(2013, 6, 13, 12, 7)
+        "descrip": "23.45 Noodle street takeaway",
+        "id": "9870005",
+        "date": datetime.datetime(2013, 6, 13, 20, 13)
     },
     {
         "descrip": "45.00,Theatre tickets",
@@ -40,9 +40,9 @@ dms = [
         "date": datetime.datetime(2013, 6, 13, 15, 42)
     },
     {
-        "descrip": "23.45 Noodle street takeaway",
-        "id": "9870005",
-        "date": datetime.datetime(2013, 6, 13, 20, 13)
+        "descrip": "4.50, Lunch on thursday",
+        "id": "9870003",
+        "date": datetime.datetime(2013, 6, 13, 12, 7)
     },
     {
         "descrip": "65, Chocolate bar",
