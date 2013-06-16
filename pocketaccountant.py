@@ -114,7 +114,7 @@ class DirectMessage(db.Model):
         newDM = DirectMessage()
         newDM.id = dm_json['id_str']
         newDM.text = dm_json['text']
-        newDM.date = DirectMessage.make_datetime(dm_content['created_at'])
+        newDM.date = DirectMessage.make_datetime(dm_json['created_at'])
         db.put(newDM)
         return newDM
 
@@ -124,7 +124,7 @@ class DirectMessage(db.Model):
         20:52:08 +0000 2013" to a datetime
         """
 
-        return datetime.datetime.strptime(string.join(date_string.split(
+        return datetime.datetime.strptime(" ".join(date_string.split(
             ' +0000 ')), '%a %b %d %H:%M:%S %Y')
 
 
